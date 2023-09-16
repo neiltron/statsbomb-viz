@@ -3,10 +3,9 @@ import matplotlib.patches as patches
 import json
 
 def draw_field():
-    # Create figure
     fig, ax = plt.subplots(figsize=(10, 6))
     
-    # Set the boundaries of the plot to the size of a soccer field
+    # set axis limits
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 80)
     
@@ -14,18 +13,18 @@ def draw_field():
     ax.set_facecolor('black')
     fig.set_facecolor('black')
     
-    # Soccer field main boundary
+    # draw boundaries
     ax.add_patch(patches.Rectangle((0, 0), 100, 80, edgecolor="white", facecolor="none"))
     
-    # Goals
+    # goals
     ax.add_patch(patches.Rectangle((0, 35), 2, 10, edgecolor="yellow", facecolor="yellow"))
     ax.add_patch(patches.Rectangle((98, 35), 2, 10, edgecolor="yellow", facecolor="yellow"))
     
-    # 18-yard boxes
+    # 18yd box
     ax.add_patch(patches.Rectangle((0, 18), 18, 44, edgecolor="white", facecolor="none"))
     ax.add_patch(patches.Rectangle((82, 18), 18, 44, edgecolor="white", facecolor="none"))
     
-    # 6-yard boxes
+    # 6yd box
     ax.add_patch(patches.Rectangle((0, 30), 6, 20, edgecolor="white", facecolor="none"))
     ax.add_patch(patches.Rectangle((94, 30), 6, 20, edgecolor="white", facecolor="none"))
 
@@ -34,11 +33,11 @@ def draw_field():
 def plot_frame(event, index):
     fig, ax = draw_field()
 
-    # Plotting visible area
+    # draw visible area
     visible_area = event['visible_area']
     ax.add_patch(patches.Polygon([(visible_area[i], visible_area[i + 1]) for i in range(0, len(visible_area), 2)], color="yellow", alpha=0.3))
 
-    # Plotting players
+    # draw players
     for entity in event['freeze_frame']:
         color = "blue" if entity['teammate'] else "red"
         if entity['actor']:
@@ -47,10 +46,8 @@ def plot_frame(event, index):
         if entity['keeper']:
             ax.annotate("GK", (entity['location'][0], entity['location'][1]), color="white", ha="center")
 
-    # Add metadata
+    # set title and save
     ax.set_title(f"Frame ID: {event['event_uuid']}\nWomen's World Cup 2023: England vs Spain", color="white")
-
-    # Save the frame as an image
     plt.savefig(f"frames/{str(index).zfill(4)}_{event['event_uuid']}.png", facecolor=fig.get_facecolor())
 
 if __name__ == "__main__":

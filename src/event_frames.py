@@ -16,21 +16,22 @@ def plot_pitch():
     fig, ax = plt.subplots(figsize=(12,8))
     ax.set_xlim(0,120)
     ax.set_ylim(0,80)
-    # Field and Center elements
+
+    # draw boundaries and center circle
     field_border = patches.Rectangle((0,0), 120, 80, color="black", zorder=0)
     centre_line = patches.ConnectionPatch((60,0), (60,80), "data", "data", color="white")
     center_circle = patches.Circle((60,40), 14.6, edgecolor="white", fill=False)
     center_spot = patches.Circle((60,40), 0.8, color="white")
 
-    # Penalty Areas (18-yard boxes)
+    # 18yd boxes
     penalty_area_left = patches.Rectangle((0, 15.82), 19.8, 48.36, linewidth=2, edgecolor='orange', facecolor='none')
     penalty_area_right = patches.Rectangle((100.2, 15.82), 19.8, 48.36, linewidth=2, edgecolor='orange', facecolor='none')
     
-    # Goal Areas (6-yard boxes)
+    # 6yd boxes
     goal_area_left = patches.Rectangle((0, 29.008), 6.6, 21.984, linewidth=2, edgecolor='yellow', facecolor='none')
     goal_area_right = patches.Rectangle((113.4, 29.008), 6.6, 21.984, linewidth=2, edgecolor='yellow', facecolor='none')
 
-    # Goals - I assume that the goals are also rectangles
+    # goals
     goal_left = patches.Rectangle((0, 35.536), -2, 8.928, linewidth=2, edgecolor='blue', facecolor='blue')
     goal_right = patches.Rectangle((120, 35.536), 2, 8.928, linewidth=2, edgecolor='blue', facecolor='blue')
 
@@ -65,7 +66,7 @@ def plot_event(event, ax, event_num, team_possession, possession_stats, match):
         ax.annotate("", xy=(x_end, y_end), xytext=(x_start, y_start), arrowprops=dict(arrowstyle="->", color=color))
         ax.text(x_start, y_start, event['player']['name'], color="white", fontsize=8)
         
-        # Add recipient text to the plot
+        # draw recipient name
         ax.text(x_end, y_end, pass_recipient, color="white", fontsize=8)
 
         ax.set_title(f"Event {event_num}: {event_type} by {event['player']['name']} to {pass_recipient}", loc='left')
@@ -136,16 +137,13 @@ def plot_event(event, ax, event_num, team_possession, possession_stats, match):
         x_loc, y_loc = event['location']
         clearance_body_part = event['clearance']['body_part']['name']
         under_pressure = event.get('under_pressure', False)
-        
-        color = 'cyan'  # Set color for clearance event
+        color = 'cyan'
 
-        # Plot the player's location during clearance
+
         ax.scatter(x_loc, y_loc, color=color)
             
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         pressure_text = "under pressure" if under_pressure else "not under pressure" # Add pressure info 
-
         ax.set_title(f"Event {event_num}: {event_type} (body part: {clearance_body_part}, {pressure_text}) by {event['player']['name']}", loc='left')
 
     elif event_type == "Foul Committed":
@@ -156,39 +154,29 @@ def plot_event(event, ax, event_num, team_possession, possession_stats, match):
         else:
           foul_card = None
             
-        color = 'darkred'  # Set color for foul committed event
+        color = 'darkred'
 
-        # Plot the player's location during foul
+        # draw player position
         ax.scatter(x_loc, y_loc, color=color)
             
-        ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-        
+        ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)        
         card_text = f"Card: {foul_card}" if foul_card else "No card"
-
         ax.set_title(f"Event {event_num}: {event_type} ({card_text}) by {event['player']['name']}", loc='left')
 
     elif event_type == "Foul Won":
         x_loc, y_loc = event['location']
-            
-        color = 'silver'  # Set color for foul won event
+        color = 'silver'
 
-        # Plot the player's location where he won the foul
-        ax.scatter(x_loc, y_loc, color=color)
-            
+        ax.scatter(x_loc, y_loc, color=color)            
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         ax.set_title(f"Event {event_num}: {event_type} by {event['player']['name']}", loc='left')
 
     elif event_type == "Dribbled Past":
         x_loc, y_loc = event['location']
-            
-        color = 'lightgreen'  # Set color for dribbled past event
+        color = 'lightgreen'
 
-        # Plot the player's location where he was dribbled past
-        ax.scatter(x_loc, y_loc, color=color)
-            
+        ax.scatter(x_loc, y_loc, color=color)       
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         ax.set_title(f"Event {event_num}: {event_type} by {event['player']['name']}", loc='left')
 
     elif event_type == "Half Start":
@@ -196,64 +184,45 @@ def plot_event(event, ax, event_num, team_possession, possession_stats, match):
 
     elif event_type == "Ball Recovery":
         x_loc, y_loc = event['location']
-            
-        color = 'darkgreen'  # Set color for ball recovery event
+        color = 'darkgreen'
 
-        # Plot the player's location where he recovered the ball
         ax.scatter(x_loc, y_loc, color=color)
-            
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         ax.set_title(f"Event {event_num}: {event_type} by {event['player']['name']}", loc='left')
 
     elif event_type == "Miscontrol":
         x_loc, y_loc = event['location']
-            
-        color = 'darkorange'  # Set color for miscontrol event
+        color = 'darkorange'
 
-        # Plot the player's location during miscontrol
         ax.scatter(x_loc, y_loc, color=color)
-            
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         ax.set_title(f"Event {event_num}: {event_type} by {event['player']['name']}", loc='left')
 
     elif event_type == "Block":
         x_loc, y_loc = event['location']
-            
-        color = 'darkviolet'  # Set color for block event
-
-        # Plot the player's location during block
+        color = 'darkviolet' 
+        
         ax.scatter(x_loc, y_loc, color=color)
-            
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         ax.set_title(f"Event {event_num}: {event_type} by {event['player']['name']}", loc='left')
 
     elif event_type == "Interception":
         x_loc, y_loc = event['location']
         interception_outcome = event['interception']['outcome']['name']
             
-        color = 'darkblue'  # Set color for interception event
+        color = 'darkblue'
 
-        # Plot the player's location during interception
         ax.scatter(x_loc, y_loc, color=color)
-            
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         ax.set_title(f"Event {event_num}: {event_type} (outcome: {interception_outcome}) by {event['player']['name']}", loc='left')
 
     elif event_type == "Goal Keeper":
         x_loc, y_loc = event['location']
         keeper_action = event['goalkeeper']['type']['name']
+        color = 'lightblue' 
 
-        color = 'lightblue'  # Set color for goalkeeper event
-
-        # Plot the goalkeeper's location during the action
-        ax.scatter(x_loc, y_loc, color=color)
-            
+        ax.scatter(x_loc, y_loc, color=color)            
         ax.text(x_loc, y_loc, event['player']['name'], color="white", fontsize=8)
-
         ax.set_title(f"Event {event_num}: {event_type} (action: {keeper_action}) by {event['player']['name']}", loc='left')
 
     match_info = f'Match: {match}'
@@ -263,7 +232,7 @@ def plot_event(event, ax, event_num, team_possession, possession_stats, match):
     possesion_percentage_barcelona = (possession_stats['Barcelona'] / total_possession) * 100
     possesion_percentage_deportivo = (possession_stats['Deportivo Alavés'] / total_possession) * 100
 
-    # Display possession percentages
+    # draw possession percentages
     ax.text(120, 85, 'Possession', color="black", fontsize=8, ha='right')
             
     team_posession_info = f"Barcelona {possesion_percentage_barcelona:.2f}%"
@@ -271,9 +240,8 @@ def plot_event(event, ax, event_num, team_possession, possession_stats, match):
     
     team_posession_info = f"Deportivo Alaves {possesion_percentage_deportivo:.2f}%"
     ax.text(120, 81, team_posession_info, color="red", fontsize=8, ha='right')
-
     
-    # Add Team Possession
+    # draw current possession
     team_posession_info = f'Team possession: {team_possession}'
     ax.text(60, 85, team_posession_info, color="blue", fontsize=12, ha='center')
 
@@ -300,7 +268,7 @@ def main():
 
     # set initial possession info
     previous_possession = events[0]['possession_team']['name']
-    previous_timestamp = 0  # Initial timestamp
+    previous_timestamp = 0
 
     for idx, event in enumerate(events):
         if event['type']['name'] != 'Starting XI':
