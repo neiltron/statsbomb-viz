@@ -19,3 +19,7 @@ Player coordinate data seems to be relative to the team and the example doesn't 
 
 ## Rendering
 The scripts just output matplotlib pngs into directories and I'm using ffmpeg to compile into videos.
+
+https://github.com/neiltron/statsbomb-viz/assets/452313/c85c7ed5-8c43-41b1-bae8-2cc80af3c848
+
+https://github.com/neiltron/statsbomb-viz/assets/452313/fa12ad00-b324-4f2e-a32e-6d262726f39e
